@@ -1,0 +1,188 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  
+  // New registration fields
+  password      String?   // For email/password users
+  birthYear     Int?      // Birth year only
+  occupation    String?   // Occupation code (e.g., 'frontend_dev')
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts     Account[]
+  sessions     Session[]
+
+  // Custom fields for WorkSync
+  jobApplications   JobApplication[]
+  moodEntries       MoodEntry[]
+  pomodoroSessions  PomodoroSession[]
+  learningEntries   LearningEntry[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("password_reset_tokens")
+}
+
+model JobApplication {
+  id          String             @id @default(cuid())
+  company     String
+  position    String
+  location    String?
+  salary      String?
+  description String?
+  status      JobApplicationStatus @default(APPLIED)
+  priority    JobPriority        @default(MEDIUM)
+  appliedAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  
+  // 面試相關
+  interviewDate DateTime?
+  interviewType String?
+  interviewNotes String?
+  
+  // 追蹤欄位
+  source      String?  // 職缺來源 (LinkedIn, 104, etc.)
+  contactPerson String?
+  referral    String?
+  
+  // 進度追蹤
+  responseReceived Boolean @default(false)
+  rejectionReason  String?
+  
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("job_applications")
+}
+
+model MoodEntry {
+  id          String   @id @default(cuid())
+  moodScore   Int      // 1-10 評分
+  note        String?
+  tags        String?  // 情緒標籤 (JSON format)
+  createdAt   DateTime @default(now())
+  
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("mood_entries")
+}
+
+model PomodoroSession {
+  id          String   @id @default(cuid())
+  duration    Int      // 分鐘數
+  taskName    String?
+  completed   Boolean  @default(false)
+  category    PomodoroCategory @default(WORK)
+  createdAt   DateTime @default(now())
+  
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("pomodoro_sessions")
+}
+
+model LearningEntry {
+  id          String   @id @default(cuid())
+  platform    String   // GitHub, LeetCode, etc.
+  activity    String   // commit, problem solved, etc.
+  description String?
+  duration    Int?     // 學習時間（分鐘）
+  difficulty  String?  // 難度等級
+  tags        String?  // 技能標籤 (JSON format)
+  createdAt   DateTime @default(now())
+  
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("learning_entries")
+}
+
+enum JobApplicationStatus {
+  APPLIED
+  SCREENING
+  INTERVIEW_SCHEDULED
+  INTERVIEW_COMPLETED
+  OFFER_RECEIVED
+  REJECTED
+  WITHDRAWN
+}
+
+enum JobPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum PomodoroCategory {
+  WORK
+  STUDY
+  JOB_SEARCH
+  INTERVIEW_PREP
+  BREAK
+}

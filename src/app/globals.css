@@ -1,26 +1,272 @@
 @import "tailwindcss";
 
+/* Light mode colors */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Backgrounds */
+  --background: 249 250 251; /* gray-50 */
+  --surface: 255 255 255; /* white */
+  --surface-secondary: 248 250 252; /* slate-50 */
+  
+  /* Text colors */
+  --foreground: 15 23 42; /* slate-900 */
+  --foreground-secondary: 71 85 105; /* slate-600 */
+  --foreground-tertiary: 148 163 184; /* slate-400 */
+  
+  /* Brand colors - Modern gradient system */
+  --primary: 79 70 229; /* indigo-600 */
+  --primary-foreground: 255 255 255;
+  --primary-hover: 67 56 202; /* indigo-700 */
+  
+  --secondary: 139 92 246; /* violet-500 */
+  --secondary-foreground: 255 255 255;
+  --secondary-hover: 124 58 237; /* violet-600 */
+  
+  /* Status colors */
+  --success: 34 197 94; /* green-500 */
+  --success-foreground: 255 255 255;
+  --warning: 245 158 11; /* amber-500 */
+  --warning-foreground: 255 255 255;
+  --error: 239 68 68; /* red-500 */
+  --error-foreground: 255 255 255;
+  
+  /* Interactive elements */
+  --border: 226 232 240; /* slate-200 */
+  --border-secondary: 241 245 249; /* slate-100 */
+  --hover: 248 250 252; /* slate-50 */
+  --active: 241 245 249; /* slate-100 */
+  
+  /* Glass morphism */
+  --glass-bg: 255 255 255 / 0.8;
+  --glass-border: 255 255 255 / 0.2;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Dark mode colors */
+[data-theme="dark"],
+.dark {
+  /* Backgrounds */
+  --background: 2 6 23; /* slate-950 */
+  --surface: 15 23 42; /* slate-900 */
+  --surface-secondary: 30 41 59; /* slate-800 */
+  
+  /* Text colors */
+  --foreground: 248 250 252; /* slate-50 */
+  --foreground-secondary: 203 213 225; /* slate-300 */
+  --foreground-tertiary: 148 163 184; /* slate-400 */
+  
+  /* Brand colors - Adjusted for dark mode */
+  --primary: 99 102 241; /* indigo-500 */
+  --primary-foreground: 255 255 255;
+  --primary-hover: 129 140 248; /* indigo-400 */
+  
+  --secondary: 168 85 247; /* violet-500 */
+  --secondary-foreground: 255 255 255;
+  --secondary-hover: 196 181 253; /* violet-300 */
+  
+  /* Status colors - Dark mode variants */
+  --success: 74 222 128; /* green-400 */
+  --success-foreground: 15 23 42;
+  --warning: 251 191 36; /* amber-400 */
+  --warning-foreground: 15 23 42;
+  --error: 248 113 113; /* red-400 */
+  --error-foreground: 15 23 42;
+  
+  /* Interactive elements */
+  --border: 51 65 85; /* slate-700 */
+  --border-secondary: 71 85 105; /* slate-600 */
+  --hover: 30 41 59; /* slate-800 */
+  --active: 51 65 85; /* slate-700 */
+  
+  /* Glass morphism - Dark mode */
+  --glass-bg: 15 23 42 / 0.8;
+  --glass-border: 255 255 255 / 0.1;
+  
+  /* Shadows - Enhanced for dark mode */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
 }
 
+/* Auto dark mode based on system preference */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme]) {
+    /* Same as [data-theme="dark"] */
+    --background: 2 6 23;
+    --surface: 15 23 42;
+    --surface-secondary: 30 41 59;
+    --foreground: 248 250 252;
+    --foreground-secondary: 203 213 225;
+    --foreground-tertiary: 148 163 184;
+    --primary: 99 102 241;
+    --primary-foreground: 255 255 255;
+    --primary-hover: 129 140 248;
+    --secondary: 168 85 247;
+    --secondary-foreground: 255 255 255;
+    --secondary-hover: 196 181 253;
+    --success: 74 222 128;
+    --success-foreground: 15 23 42;
+    --warning: 251 191 36;
+    --warning-foreground: 15 23 42;
+    --error: 248 113 113;
+    --error-foreground: 15 23 42;
+    --border: 51 65 85;
+    --border-secondary: 71 85 105;
+    --hover: 30 41 59;
+    --active: 51 65 85;
+    --glass-bg: 15 23 42 / 0.8;
+    --glass-border: 255 255 255 / 0.1;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
   }
 }
 
+@theme {
+  /* Font families */
+  --font-family-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-family-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+/* Custom Tailwind utilities */
+@layer base {
+  .bg-background { background-color: rgb(var(--background)); }
+  .bg-surface { background-color: rgb(var(--surface)); }
+  .bg-surface-secondary { background-color: rgb(var(--surface-secondary)); }
+  
+  .text-foreground { color: rgb(var(--foreground)); }
+  .text-foreground-secondary { color: rgb(var(--foreground-secondary)); }
+  .text-foreground-tertiary { color: rgb(var(--foreground-tertiary)); }
+  
+  .bg-primary { background-color: rgb(var(--primary)); }
+  .text-primary-foreground { color: rgb(var(--primary-foreground)); }
+  .bg-primary-hover { background-color: rgb(var(--primary-hover)); }
+  
+  .bg-secondary { background-color: rgb(var(--secondary)); }
+  .text-secondary-foreground { color: rgb(var(--secondary-foreground)); }
+  .bg-secondary-hover { background-color: rgb(var(--secondary-hover)); }
+  
+  .bg-success { background-color: rgb(var(--success)); }
+  .text-success-foreground { color: rgb(var(--success-foreground)); }
+  .bg-warning { background-color: rgb(var(--warning)); }
+  .text-warning-foreground { color: rgb(var(--warning-foreground)); }
+  .bg-error { background-color: rgb(var(--error)); }
+  .text-error-foreground { color: rgb(var(--error-foreground)); }
+  
+  .border-border { border-color: rgb(var(--border)); }
+  .border-border-secondary { border-color: rgb(var(--border-secondary)); }
+  .bg-hover { background-color: rgb(var(--hover)); }
+  .bg-active { background-color: rgb(var(--active)); }
+  
+  .bg-glass-bg { background-color: var(--glass-bg); }
+  .border-glass-border { border-color: var(--glass-border); }
+  
+  .shadow-sm { box-shadow: var(--shadow-sm); }
+  .shadow-md { box-shadow: var(--shadow-md); }
+  .shadow-lg { box-shadow: var(--shadow-lg); }
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: rgb(var(--background));
+  color: rgb(var(--foreground));
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Enhanced smooth transitions for theme switching */
+* {
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              backdrop-filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Login page background with enhanced transition */
+.login-bg {
+  background: linear-gradient(135deg, #eff6ff 0%, #c7d2fe 100%);
+  transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] .login-bg,
+.dark .login-bg {
+  background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+}
+
+/* Theme Switch Styles */
+.theme-label:hover .moon,
+.theme-label:hover .sun {
+  transform: rotate(360deg);
+}
+
+.shadow-inner-light {
+  box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.1) inset;
+}
+
+.shadow-inner-dark {
+  box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.5) inset;
+}
+
+/* Enhanced background animation inspired by CodePen */
+.login-bg-animated {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 25%, #bfdbfe 50%, #93c5fd 75%, #60a5fa 100%);
+  background-size: 300% 300%;
+  background-position: 0% 0%;
+  transition: background-position 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] .login-bg-animated,
+.dark .login-bg-animated {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%);
+  background-position: 100% 100%;
+}
+
+/* WorkSync Logo Animations */
+@keyframes logo-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes logo-sweep {
+  0% {
+    transform: translateX(-300px);
+  }
+  100% {
+    transform: translateX(300px);
+  }
+}
+
+@keyframes logo-ring-pulse {
+  0% {
+    stroke-width: 9;
+  }
+  50% {
+    stroke-width: 12;
+  }
+  100% {
+    stroke-width: 9;
+  }
+}
+
+.logo-rotate {
+  animation: logo-rotate 10s linear infinite;
+}
+
+.logo-paused {
+  animation-play-state: paused;
+}
+
+.logo-ring-pulse {
+  animation: logo-ring-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.logo-sweep-effect {
+  animation: logo-sweep 2s ease-in-out;
 }
