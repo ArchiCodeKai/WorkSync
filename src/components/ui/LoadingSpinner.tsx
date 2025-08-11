@@ -1,7 +1,9 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useTheme } from '@/lib/hooks/useTheme'
+import WorkSyncLogo from './WorkSyncLogo'
 
 interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
@@ -9,6 +11,8 @@ interface LoadingSpinnerProps {
   className?: string
   text?: string
   showIcon?: boolean
+  showProgress?: boolean
+  progressDuration?: number
   'aria-label'?: string
   'aria-live'?: 'polite' | 'assertive' | 'off'
 }
@@ -26,6 +30,8 @@ export default function LoadingSpinner({
   className = '',
   text,
   showIcon = true,
+  showProgress = true,
+  progressDuration = 3000,
   'aria-label': ariaLabel = 'Loading',
   'aria-live': ariaLive = 'polite'
 }: LoadingSpinnerProps) {
@@ -33,61 +39,96 @@ export default function LoadingSpinner({
   const isDark = theme === 'dark'
   const dimensions = sizeMap[size]
   const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  
+  // Progress bar state
+  const [progress, setProgress] = useState(0)
+  
+  useEffect(() => {
+    if (showProgress && variant === 'worksync') {
+      const interval = setInterval(() => {
+        setProgress(prev => {
+          const increment = 100 / (progressDuration / 100)
+          const newProgress = prev + increment
+          return newProgress >= 100 ? 100 : newProgress
+        })
+      }, 100)
+      
+      return () => clearInterval(interval)
+    }
+  }, [showProgress, variant, progressDuration])
 
   if (variant === 'worksync') {
     return (
       <div 
-        className={`flex flex-col items-center justify-center ${className}`}
+        className={`flex flex-col items-center justify-center space-y-8 ${className}`}
         role="status"
         aria-label={ariaLabel}
         aria-live={ariaLive}
       >
         {showIcon && (
           <motion.div
-            className="relative mb-6"
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            className="relative"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <motion.div
-              className={`w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg ${isDark ? 'shadow-blue-900/30' : 'shadow-blue-500/30'}`}
-              animate={{ 
-                boxShadow: isDark 
-                  ? ['0 4px 20px rgba(59, 130, 246, 0.3)', '0 8px 32px rgba(147, 51, 234, 0.4)', '0 4px 20px rgba(59, 130, 246, 0.3)']
-                  : ['0 4px 20px rgba(59, 130, 246, 0.2)', '0 8px 32px rgba(147, 51, 234, 0.3)', '0 4px 20px rgba(59, 130, 246, 0.2)']
-              }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              <motion.span 
-                className="text-2xl font-bold text-white"
-                animate={{ rotate: [0, 5, -5, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-              >
-                💼
-              </motion.span>
-            </motion.div>
-            
-            {/* Rotating ring around the icon */}
-            <motion.div
-              className="absolute inset-0 w-16 h-16 border-2 border-transparent rounded-full"
-              style={{
-                borderTopColor: isDark ? '#60a5fa' : '#3b82f6',
-                borderRightColor: isDark ? '#a855f7' : '#8b5cf6'
-              }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+            <WorkSyncLogo 
+              size={120} 
+              showText={false} 
+              variant="premium"
+              animationSpeed={1.5}
+              rotationSpeed={6}
             />
           </motion.div>
         )}
         
+        {/* Loading Text */}
         {text && (
-          <motion.p 
-            className="text-foreground-secondary text-center sr-only sm:not-sr-only"
-            animate={prefersReducedMotion ? {} : { opacity: [0.7, 1, 0.7] }}
-            transition={prefersReducedMotion ? {} : { duration: 2, repeat: Infinity }}
-            aria-live={ariaLive}
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
           >
-            {text}
-          </motion.p>
+            <motion.p 
+              className="text-lg font-medium text-foreground mb-2"
+              animate={prefersReducedMotion ? {} : { opacity: [0.8, 1, 0.8] }}
+              transition={prefersReducedMotion ? {} : { duration: 2, repeat: Infinity }}
+              aria-live={ariaLive}
+            >
+              {text}
+            </motion.p>
+            <p className="text-sm text-foreground-secondary">
+              設定您的工作同步環境...
+            </p>
+          </motion.div>
+        )}
+        
+        {/* Progress Bar */}
+        {showProgress && (
+          <motion.div
+            className="w-64 space-y-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            <div className="flex justify-between text-xs text-foreground-secondary">
+              <span>載入中...</span>
+              <span>{Math.round(progress)}%</span>
+            </div>
+            <div className="h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              <motion.div
+                className={`h-full rounded-full ${
+                  isDark 
+                    ? 'bg-gradient-to-r from-gray-300 to-white' 
+                    : 'bg-gradient-to-r from-gray-700 to-black'
+                }`}
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+              />
+            </div>
+          </motion.div>
         )}
         
         {/* Screen reader only text */}

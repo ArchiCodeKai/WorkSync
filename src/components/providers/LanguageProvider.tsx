@@ -18,13 +18,31 @@ export function LanguageProvider({
   const [locale, setLocale] = useState<Locale>(defaultLanguage)
   const [isClient, setIsClient] = useState(false)
 
+  // 檢測瀏覽器語言並映射到支持的語言
+  const detectBrowserLanguage = (): Locale => {
+    if (typeof window === 'undefined') return defaultLanguage
+    
+    const browserLang = navigator.language || (navigator.languages && navigator.languages[0]) || 'en'
+    
+    if (browserLang.startsWith('zh')) return 'zh-TW'
+    if (browserLang.startsWith('ja')) return 'ja'
+    return 'en' // 默認英文
+  }
+
   useEffect(() => {
     // Set client flag and load language from localStorage
     setIsClient(true)
     if (typeof window !== 'undefined') {
       const savedLanguage = localStorage.getItem(storageKey) as Locale
+      
       if (savedLanguage && ['zh-TW', 'en', 'ja'].includes(savedLanguage)) {
+        // 如果有保存的語言偏好，使用保存的語言
         setLocale(savedLanguage)
+      } else {
+        // 如果沒有保存的語言偏好，自動檢測瀏覽器語言
+        const detectedLanguage = detectBrowserLanguage()
+        setLocale(detectedLanguage)
+        localStorage.setItem(storageKey, detectedLanguage)
       }
     }
   }, [storageKey])

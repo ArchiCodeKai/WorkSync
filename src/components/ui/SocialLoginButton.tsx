@@ -68,7 +68,7 @@ export default function SocialLoginButton({
       role="button"
       tabIndex={disabled ? -1 : 0}
       className={`
-        w-full flex items-center justify-center gap-3 px-4 py-3 
+        w-full flex items-center justify-center px-4 py-3 relative
         border ${config.colors.border} rounded-lg 
         ${config.colors.hover} ${config.colors.focus}
         transition-all duration-300 
@@ -113,9 +113,9 @@ export default function SocialLoginButton({
         transition={{ duration: 0.6, ease: "easeInOut" }}
       />
       
-      {/* Icon with enhanced animations or loading spinner */}
+      {/* Icon fixed to left side */}
       <motion.div
-        className="flex items-center justify-center w-5 h-5"
+        className="absolute left-4 sm:left-6 xs:left-3 flex items-center justify-center w-5 h-5"
         animate={{
           scale: isPressed ? 0.95 : 1,
           rotate: isPressed ? 1 : 0
@@ -137,7 +137,7 @@ export default function SocialLoginButton({
         )}
       </motion.div>
       
-      {/* Button text with subtle animation */}
+      {/* Button text centered */}
       <motion.span 
         className="text-foreground font-medium relative z-10 select-none"
         animate={{

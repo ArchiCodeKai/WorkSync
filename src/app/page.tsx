@@ -25,6 +25,18 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
+  
+  // 最少載入 3 秒以提供良好的用戶體驗
+  const [minLoadingComplete, setMinLoadingComplete] = useState(false)
+  
+  useEffect(() => {
+    // 至少載入 3 秒鐘
+    const minLoadingTimer = setTimeout(() => {
+      setMinLoadingComplete(true)
+    }, 3000)
+    
+    return () => clearTimeout(minLoadingTimer)
+  }, [])
 
   // Pre-fill email from URL params and show messages
   useEffect(() => {
@@ -123,14 +135,17 @@ export default function HomePage() {
     router.push('/dashboard')
   }
 
-  // Show loading while checking session
-  if (status === 'loading') {
+  // 顯示載入畫面：session 載入中 或 最少載入時間未完成
+  if (status === 'loading' || !minLoadingComplete) {
     return (
       <div className="min-h-screen login-bg-animated flex items-center justify-center">
         <LoadingSpinner 
           variant="worksync" 
           text="Loading WorkSync..."
           className="text-center"
+          showProgress={true}
+          progressDuration={3000}
+          showIcon={true}
         />
       </div>
     )
