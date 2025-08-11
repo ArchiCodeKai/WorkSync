@@ -1,0 +1,36 @@
+<!-- Apple Touch Icon - 高分辨率版本 -->
+<svg viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg" width="180" height="180">
+  <!-- 背景圓角矩形 -->
+  <rect width="180" height="180" rx="36" fill="#000000"/>
+  
+  <!-- 放大的扭曲環形，移除細框線 -->
+  <path 
+    d="M90,25 
+       C135,25 155,50 155,90 
+       C155,130 135,155 90,155 
+       C45,155 25,130 25,90 
+       C25,50 45,25 90,25 
+       Z
+       M90,50 
+       C65,50 50,70 50,90 
+       C50,110 65,130 90,130 
+       C115,130 130,110 130,90 
+       C130,70 115,50 90,50 
+       Z" 
+    fill="#ffffff"
+  />
+  
+  <!-- 放大的 W 字母 -->
+  <text 
+    x="90" 
+    y="100" 
+    text-anchor="middle" 
+    dominant-baseline="middle" 
+    font-family="system-ui, -apple-system, sans-serif" 
+    font-size="58" 
+    font-weight="700" 
+    fill="#000000"
+  >
+    W
+  </text>
+</svg>
