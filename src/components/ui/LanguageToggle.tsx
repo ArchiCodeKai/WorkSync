@@ -29,7 +29,7 @@ export function LanguageToggle() {
         variant="ghost"
         size="sm"
         onClick={() => setIsOpen(!isOpen)}
-        className="h-7 px-2 py-0 min-w-[50px] flex items-center justify-center gap-1 text-gray-600 dark:text-gray-300 hover:bg-gray-100/50 dark:hover:bg-gray-700/50 border-0 rounded-full transition-all duration-200"
+        className="h-7 px-2 py-0 min-w-[50px] flex items-center justify-center gap-1 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 border-0 rounded-full transition-all duration-200 bg-white/80 dark:bg-gray-800/80"
       >
         <LanguageIcon className="h-4 w-4" />
         <span className="text-xs font-medium">

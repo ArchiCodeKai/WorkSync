@@ -45,7 +45,7 @@ export function DailyMotivationCard() {
   
   // Get random quote based on current day to ensure consistency
   const today = new Date().getDate()
-  const quotes = motivationalQuotes[locale] || motivationalQuotes['zh-TW']
+  const quotes = motivationalQuotes[locale as keyof typeof motivationalQuotes] || motivationalQuotes['zh-TW']
   const todayQuote = quotes[today % quotes.length]
 
   return (

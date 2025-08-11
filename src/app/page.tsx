@@ -1,18 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession, signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui'
-import { ThemeToggleSwitch } from '@/components/ui/ThemeToggleSwitch'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { LanguageToggle } from '@/components/ui/LanguageToggle'
 import WorkSyncLogo from '@/components/ui/WorkSyncLogo'
 import SocialLoginButton from '@/components/ui/SocialLoginButton'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
 import { useLanguage } from '@/lib/hooks/useLanguage'
 
-export default function HomePage() {
+function HomePageContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -108,8 +108,10 @@ export default function HomePage() {
     try {
       if (provider === 'google') {
         await signIn('google', { callbackUrl: '/dashboard' })
+      } else if (provider === 'linkedin') {
+        await signIn('linkedin', { callbackUrl: '/dashboard' })
       } else {
-        // Mock authentication for LinkedIn and Apple
+        // Mock authentication for Apple (LinkedIn now uses real auth)
         await handleMockSignIn(provider)
       }
     } catch (err) {
@@ -120,13 +122,13 @@ export default function HomePage() {
   }
 
   const handleMockSignIn = async (provider: string) => {
-    // Mock login for development
+    // Mock login for development (currently only used for Apple)
     await new Promise(resolve => setTimeout(resolve, 1000))
     
     const mockUser = {
       id: '1',
-      name: provider === 'linkedin' ? 'Jane Smith' : 'Apple User',
-      email: provider === 'linkedin' ? 'jane@linkedin.com' : 'user@icloud.com',
+      name: provider === 'apple' ? 'Apple User' : 'Mock User',
+      email: provider === 'apple' ? 'user@icloud.com' : 'user@example.com',
       provider
     }
     
@@ -164,7 +166,7 @@ export default function HomePage() {
           <LanguageToggle />
         </div>
         <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-md rounded-full p-1 border border-gray-200/30 dark:border-gray-700/30 shadow-sm hover:shadow-md transition-all duration-300">
-          <ThemeToggleSwitch />
+          <ThemeToggle />
         </div>
       </div>
       
@@ -335,5 +337,17 @@ export default function HomePage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner variant="worksync" text="Loading..." />
+      </div>
+    }>
+      <HomePageContent />
+    </Suspense>
   )
 }

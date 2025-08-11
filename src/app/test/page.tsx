@@ -20,7 +20,7 @@ export default function TestPage() {
         <div className="flex gap-2 mt-2">
           <Button onClick={() => setTheme('light')}>Light</Button>
           <Button onClick={() => setTheme('dark')}>Dark</Button>
-          <Button onClick={() => setTheme('system')}>System</Button>
+          <Button onClick={() => setTheme('light')}>System (Light)</Button>
         </div>
       </div>
 

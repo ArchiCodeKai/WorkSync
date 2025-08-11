@@ -132,7 +132,7 @@ export type IdParamInput = z.infer<typeof IdParamSchema>
 export const BatchOperationSchema = z.object({
   ids: z.array(z.string().cuid()).min(1, '至少選擇一個項目').max(50, '一次最多操作 50 個項目'),
   action: z.enum(['delete', 'update_status', 'archive']),
-  data: z.record(z.any()).optional(),
+  data: z.record(z.string(), z.any()).optional(),
 })
 
 export type BatchOperationInput = z.infer<typeof BatchOperationSchema>

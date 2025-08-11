@@ -10,10 +10,36 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-    // LinkedIn Provider - will need LinkedIn app setup
-    // LinkedIn provider is not officially supported by NextAuth.js
-    // We'll use a custom implementation later
-    
+    // LinkedIn OpenID Connect Provider - Only enable if real credentials are provided
+    ...(process.env.LINKEDIN_CLIENT_ID && 
+        process.env.LINKEDIN_CLIENT_ID !== 'your-real-linkedin-client-id' && 
+        process.env.LINKEDIN_CLIENT_SECRET && 
+        process.env.LINKEDIN_CLIENT_SECRET !== 'your-real-linkedin-client-secret' 
+        ? [{
+      id: 'linkedin',
+      name: 'LinkedIn',
+      type: 'oauth',
+      wellKnown: 'https://www.linkedin.com/.well-known/openid-configuration',
+      authorization: {
+        url: 'https://www.linkedin.com/oauth/v2/authorization',
+        params: {
+          scope: 'openid profile email',
+          response_type: 'code',
+        },
+      },
+      token: 'https://www.linkedin.com/oauth/v2/accessToken',
+      userinfo: 'https://api.linkedin.com/v2/userinfo',
+      clientId: process.env.LINKEDIN_CLIENT_ID!,
+      clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        }
+      },
+    }] : []),
     // Apple Provider - will need Apple app setup  
     // Apple provider configuration would go here
   ],

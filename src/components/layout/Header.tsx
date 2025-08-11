@@ -100,7 +100,7 @@ export function Header() {
                   {user?.image ? (
                     <img
                       src={user.image}
-                      alt={user.name}
+                      alt={user.name || 'User'}
                       className="w-8 h-8 rounded-full"
                     />
                   ) : (

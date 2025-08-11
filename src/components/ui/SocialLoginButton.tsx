@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { GoogleIcon, LinkedInIcon, AppleIcon } from './icons'
 import LoadingSpinner from './LoadingSpinner'
+import { useTheme } from '@/lib/hooks/useTheme'
 
 interface SocialLoginButtonProps {
   provider: 'google' | 'linkedin' | 'apple'
@@ -19,7 +20,7 @@ const providerConfig = {
     icon: GoogleIcon,
     colors: {
       border: 'border-red-200 dark:border-red-800/30',
-      hover: 'hover:bg-red-50 dark:hover:bg-red-900/10',
+      hover: 'hover:bg-red-50 dark:hover:bg-black/80',
       focus: 'focus:ring-red-500/20',
       shadow: 'hover:shadow-red-500/10'
     }
@@ -28,7 +29,7 @@ const providerConfig = {
     icon: LinkedInIcon,
     colors: {
       border: 'border-blue-200 dark:border-blue-800/30',
-      hover: 'hover:bg-blue-50 dark:hover:bg-blue-900/10',
+      hover: 'hover:bg-blue-50 dark:hover:bg-black/80',
       focus: 'focus:ring-blue-500/20',
       shadow: 'hover:shadow-blue-500/10'
     }
@@ -37,7 +38,7 @@ const providerConfig = {
     icon: AppleIcon,
     colors: {
       border: 'border-gray-200 dark:border-gray-600',
-      hover: 'hover:bg-gray-50 dark:hover:bg-gray-800/50',
+      hover: 'hover:bg-gray-50 dark:hover:bg-black/80',
       focus: 'focus:ring-gray-500/20',
       shadow: 'hover:shadow-gray-500/10'
     }
@@ -54,6 +55,8 @@ export default function SocialLoginButton({
 }: SocialLoginButtonProps) {
   const [isHovered, setIsHovered] = useState(false)
   const [isPressed, setIsPressed] = useState(false)
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
   
   const config = providerConfig[provider]
   const IconComponent = config.icon
@@ -70,7 +73,6 @@ export default function SocialLoginButton({
       className={`
         w-full flex items-center justify-center px-4 py-3 relative
         border ${config.colors.border} rounded-lg 
-        ${config.colors.hover} ${config.colors.focus}
         transition-all duration-300 
         disabled:opacity-50 disabled:cursor-not-allowed
         focus:outline-none focus:ring-2 focus:ring-offset-2
@@ -82,6 +84,13 @@ export default function SocialLoginButton({
         sm:px-6 sm:py-3 xs:px-3 xs:py-2
         ${className}
       `}
+      style={{
+        backgroundColor: isHovered && isDark 
+          ? 'rgba(0, 0, 0, 0.9)' 
+          : isHovered && !isDark
+          ? 'rgba(248, 250, 252, 0.8)'  // 淺色模式的淺灰背景
+          : undefined
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
         setIsHovered(false)
