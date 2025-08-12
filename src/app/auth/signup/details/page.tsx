@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui'
@@ -9,7 +9,10 @@ import { LanguageToggle } from '@/components/ui/LanguageToggle'
 import { useLanguage } from '@/lib/hooks/useLanguage'
 import { getOccupationOptions } from '@/lib/constants/occupations'
 
-export default function SignUpDetailsPage() {
+// Force dynamic for this page due to useSearchParams
+export const dynamic = 'force-dynamic'
+
+function SignUpDetailsContent() {
   const { t, locale } = useLanguage()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -297,5 +300,21 @@ export default function SignUpDetailsPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+function LoadingSpinner() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    </div>
+  )
+}
+
+export default function SignUpDetailsPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <SignUpDetailsContent />
+    </Suspense>
   )
 }
