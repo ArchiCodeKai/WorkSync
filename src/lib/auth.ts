@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
         ? [{
       id: 'linkedin',
       name: 'LinkedIn',
-      type: 'oauth',
+      type: 'oauth' as const,
       wellKnown: 'https://www.linkedin.com/.well-known/openid-configuration',
       authorization: {
         url: 'https://www.linkedin.com/oauth/v2/authorization',
@@ -31,7 +31,7 @@ export const authOptions: NextAuthOptions = {
       userinfo: 'https://api.linkedin.com/v2/userinfo',
       clientId: process.env.LINKEDIN_CLIENT_ID!,
       clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
-      profile(profile) {
+      profile(profile: any) {
         return {
           id: profile.sub,
           name: profile.name,

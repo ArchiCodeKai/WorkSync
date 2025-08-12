@@ -37,7 +37,7 @@ async function testGoogleOAuth() {
       console.log('❌ /api/auth/session - Failed to fetch')
     }
 
-  } catch (error) {
+  } catch (error: any) {
     console.log('❌ Error testing endpoints:', error.message)
   }
 

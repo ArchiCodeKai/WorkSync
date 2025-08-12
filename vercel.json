@@ -1,11 +1,9 @@
 {
   "framework": "nextjs",
   "functions": {
-    "app/api/**": {
-      "runtime": "nodejs18.x",
-      "maxDuration": 10
+    "app/api/**/*.ts": {
+      "runtime": "vercel-node@18.x"
     }
   },
-  "regions": ["hkg1"],
-  "crons": []
+  "regions": ["hkg1"]
 }

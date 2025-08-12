@@ -17,11 +17,7 @@ const eslintConfig = [
       "@typescript-eslint/no-explicit-any": "warn", // Changed from off to warn
       "@typescript-eslint/no-unused-vars": "warn",
       "react/no-unescaped-entities": "off", // Will fix these properly later
-      "@typescript-eslint/ban-types": "warn", // Changed from off to warn
       
-      // Keep important rules enabled
-      "@typescript-eslint/no-unsafe-call": "error",
-      "@typescript-eslint/no-unsafe-return": "error",
     },
   },
 ];

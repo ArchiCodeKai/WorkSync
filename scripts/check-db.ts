@@ -16,7 +16,7 @@ async function checkDatabase() {
 
     console.log(`👥 Found ${users.length} users:`)
     users.forEach(user => {
-      console.log(`  - ${user.name} (${user.email}) - Provider: ${user.provider}`)
+      console.log(`  - ${user.name} (${user.email})`)
       console.log(`    📋 Jobs: ${user.jobApplications.length}`)
       console.log(`    😊 Moods: ${user.moodEntries.length}`)
       console.log(`    🍅 Pomodoros: ${user.pomodoroSessions.length}`)

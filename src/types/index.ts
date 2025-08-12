@@ -1,5 +1,5 @@
 // Database types
-export type {
+import type {
   User,
   JobApplication,
   MoodEntry,
@@ -9,6 +9,17 @@ export type {
   JobPriority,
   PomodoroCategory,
 } from '@prisma/client'
+
+export type {
+  User,
+  JobApplication,
+  MoodEntry,
+  PomodoroSession,
+  LearningEntry,
+  JobApplicationStatus,
+  JobPriority,
+  PomodoroCategory,
+}
 
 // Extended types
 export interface JobApplicationWithStats extends JobApplication {
