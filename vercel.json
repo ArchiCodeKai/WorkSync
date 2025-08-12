@@ -1,6 +1,11 @@
 {
-  "buildCommand": "npm run build:vercel",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "functions": {
+    "app/api/**": {
+      "runtime": "nodejs18.x",
+      "maxDuration": 10
+    }
+  },
+  "regions": ["hkg1"],
+  "crons": []
 }

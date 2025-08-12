@@ -1,5 +1,8 @@
 'use client'
 
+// Force dynamic for this page only due to useSearchParams
+export const dynamic = 'force-dynamic'
+
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession, signIn } from 'next-auth/react'

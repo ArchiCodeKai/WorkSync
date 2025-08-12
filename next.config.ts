@@ -2,23 +2,24 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
+    // Only ignore during builds, but allow local development linting
     ignoreDuringBuilds: true,
   },
   typescript: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has type errors.
+    // Only ignore build errors temporarily, will fix them properly
     ignoreBuildErrors: true,
   },
-  // Disable static optimization completely to avoid useSearchParams issues
+  // Optimize for production (without problematic CSS optimization)
   experimental: {
-    forceSwcTransforms: true,
+    optimizePackageImports: ['lucide-react', '@heroicons/react'],
   },
-  // Force dynamic rendering for all pages
-  trailingSlash: false,
-  // Disable static exports
-  output: undefined,
+  // Enable compression and optimizations
+  compress: true,
+  poweredByHeader: false,
+  // Only disable static optimization for specific problematic pages
+  async rewrites() {
+    return []
+  },
 };
 
 export default nextConfig;

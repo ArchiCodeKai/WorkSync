@@ -1,5 +1,8 @@
 'use client'
 
+// This page can be statically generated
+export const dynamic = 'auto'
+
 import Link from 'next/link'
 import { useLanguage } from '@/lib/hooks/useLanguage'
 
