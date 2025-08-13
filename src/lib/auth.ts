@@ -19,7 +19,6 @@ export const authOptions: NextAuthOptions = {
       id: 'linkedin',
       name: 'LinkedIn',
       type: 'oauth' as const,
-      wellKnown: 'https://www.linkedin.com/.well-known/openid-configuration',
       authorization: {
         url: 'https://www.linkedin.com/oauth/v2/authorization',
         params: {
