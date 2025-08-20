@@ -2,11 +2,12 @@
 
 ## ✅ 已完成的配置
 
-### 1. 環境變數已更新
+### 1. 環境變數已更新（網頁應用程式版本）
 ```bash
-GOOGLE_CLIENT_ID="622771058151-f3m69suctbg8oim9p6cib44512ioqnb4.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET="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"
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
 NEXTAUTH_URL="http://localhost:3000"
+# 生產環境：NEXTAUTH_URL="https://your-vercel-url.vercel.app"
 ```
 
 ### 2. NextAuth.js 配置已就緒
@@ -22,16 +23,18 @@ NEXTAUTH_URL="http://localhost:3000"
 - 網址：https://console.cloud.google.com/
 - 選擇專案：`firm-hybrid-398613`
 
-### 2. 設定 OAuth 2.0 客戶端
+### 2. 設定 OAuth 2.0 客戶端（網頁應用程式類型）
 1. 前往 **APIs & Services** → **Credentials**
-2. 點擊你的 OAuth 2.0 客戶端 ID
+2. 建立 **OAuth 客戶端 ID** → 選擇 **「網頁應用程式」**
 3. 在 **「已授權的重新導向 URI」** 區段中添加：
    ```
    http://localhost:3000/api/auth/callback/google
+   https://work-sync-gamma.vercel.app/api/auth/callback/google
    ```
 4. 在 **「已授權的 JavaScript 來源」** 區段中添加：
    ```
    http://localhost:3000
+   https://work-sync-gamma.vercel.app
    ```
 5. 點擊 **「儲存」**
 
