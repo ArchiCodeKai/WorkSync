@@ -4,7 +4,7 @@ import GoogleProvider from 'next-auth/providers/google'
 import { prisma } from './prisma'
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  // adapter: PrismaAdapter(prisma), // Temporarily disabled
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -55,6 +55,6 @@ export const authOptions: NextAuthOptions = {
     signIn: '/',
   },
   session: {
-    strategy: 'database',
+    strategy: 'jwt',
   },
 }

@@ -5,7 +5,7 @@
 （技術棧：Next.js + React + TypeScript + Tailwind）
 
 ## 可修改範圍
-- ✅ `app/**`、`src/**`、`components/**`、`lib/**`、`styles/**`
+- ✅ `app/**`、`src/**`、`components/**`、`lib/**`、`styles/**`、`tailwind.config.ts`
 - ⚠️ `prisma/schema.prisma`、`package.json`、`tsconfig.json` 僅在任務明確要求時變更
 - ❌ 不得提交大型二進位資產或不必要的相依
 
@@ -17,7 +17,7 @@
 ## 成功條件
 - `typecheck`、`lint`、`build` 全數通過
 - 變更最小化、不引入不必要相依
-- 無瀏覽器/Node 警告（避免多餘 console 噪音）
+- ESLint errors 必須修正，warnings 可接受
 - 動效/互動若有指定，需提供最小測試步驟（見回覆格式）
 
 ## 回覆格式（嚴格限制）
@@ -30,6 +30,13 @@
 - 推理上限：≤ 4000 tokens
 - 最終回覆：≤ 800 tokens
 - 僅在需要時讀取檔案；避免全文掃描
+
+## Git Commit 規則 🚨
+- **絕對禁止：任何 Claude 相關署名或標記**
+- 不使用 `🤖 Generated with [Claude Code]` 
+- 不使用 `Co-Authored-By: Claude <noreply@anthropic.com>`
+- 只寫簡潔專業的 commit message
+- 使用者必須是唯一作者
 
 ## 失敗處理
 - 任何一步失敗：修正 → 重跑 `./scripts/ci.sh` → **全綠才可回覆**
