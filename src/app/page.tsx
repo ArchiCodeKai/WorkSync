@@ -104,7 +104,27 @@ function HomePageContent() {
     }
   }
 
+  const isInAppBrowser = () => {
+    const ua = navigator.userAgent || navigator.vendor || (window as any).opera
+    return (
+      ua.includes('Line') || 
+      ua.includes('WhatsApp') || 
+      ua.includes('MicroMessenger') || 
+      ua.includes('Twitter') || 
+      ua.includes('Facebook') || 
+      ua.includes('Instagram') ||
+      ua.includes('Telegram') ||
+      ua.includes('Discord')
+    )
+  }
+
   const handleOAuthSignIn = async (provider: string) => {
+    // 檢測是否在 app 內建瀏覽器
+    if (isInAppBrowser() && (provider === 'google' || provider === 'linkedin')) {
+      setError('請使用外部瀏覽器（Safari、Chrome）登入 Google 或 LinkedIn。點擊右上角「在瀏覽器中開啟」。')
+      return
+    }
+
     setIsLoading(true)
     setError('')
     
