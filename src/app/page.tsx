@@ -104,35 +104,33 @@ function HomePageContent() {
     }
   }
 
-  const isInAppBrowser = () => {
-    const ua = navigator.userAgent || navigator.vendor || (window as any).opera
-    return (
-      ua.includes('Line') || 
-      ua.includes('WhatsApp') || 
-      ua.includes('MicroMessenger') || 
-      ua.includes('Twitter') || 
-      ua.includes('Facebook') || 
-      ua.includes('Instagram') ||
-      ua.includes('Telegram') ||
-      ua.includes('Discord')
-    )
-  }
-
   const handleOAuthSignIn = async (provider: string) => {
-    // 檢測是否在 app 內建瀏覽器
-    if (isInAppBrowser() && (provider === 'google' || provider === 'linkedin')) {
-      setError('請使用外部瀏覽器（Safari、Chrome）登入 Google 或 LinkedIn。點擊右上角「在瀏覽器中開啟」。')
-      return
-    }
-
     setIsLoading(true)
     setError('')
     
     try {
       if (provider === 'google') {
-        await signIn('google', { callbackUrl: '/dashboard' })
+        const result = await signIn('google', { 
+          callbackUrl: '/dashboard',
+          redirect: false 
+        })
+        
+        if (result?.ok) {
+          router.push('/dashboard')
+        } else if (result?.error) {
+          setError('Google 登入失敗，請重試')
+        }
       } else if (provider === 'linkedin') {
-        await signIn('linkedin', { callbackUrl: '/dashboard' })
+        const result = await signIn('linkedin', { 
+          callbackUrl: '/dashboard',
+          redirect: false 
+        })
+        
+        if (result?.ok) {
+          router.push('/dashboard')
+        } else if (result?.error) {
+          setError('LinkedIn 登入失敗，請重試')
+        }
       } else {
         // Mock authentication for Apple (LinkedIn now uses real auth)
         await handleMockSignIn(provider)
