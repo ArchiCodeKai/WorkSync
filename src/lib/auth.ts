@@ -43,16 +43,19 @@ export const authOptions: NextAuthOptions = {
     // Apple provider configuration would go here
   ],
   callbacks: {
-    session: ({ session, user }) => ({
+    session: ({ session, token }) => ({
       ...session,
       user: {
         ...session.user,
-        id: user.id,
+        id: token.sub,
       },
     }),
-  },
-  pages: {
-    signIn: '/',
+    jwt: ({ token, user }) => {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
   },
   session: {
     strategy: 'jwt',
