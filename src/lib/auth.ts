@@ -1,7 +1,6 @@
 import { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import GoogleProvider from 'next-auth/providers/google'
-import LinkedInProvider from 'next-auth/providers/linkedin'
 import { prisma } from './prisma'
 
 export const authOptions: NextAuthOptions = {
@@ -11,15 +10,32 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-    // LinkedIn Provider - Only enable if credentials are provided
+    // LinkedIn OpenID Connect Provider - Custom configuration
     ...(process.env.LINKEDIN_CLIENT_ID && 
         process.env.LINKEDIN_CLIENT_ID !== 'your-real-linkedin-client-id' && 
         process.env.LINKEDIN_CLIENT_SECRET && 
         process.env.LINKEDIN_CLIENT_SECRET !== 'your-real-linkedin-client-secret' 
-        ? [LinkedInProvider({
+        ? [{
+          id: 'linkedin',
+          name: 'LinkedIn',
+          type: 'oidc' as const,
+          issuer: 'https://www.linkedin.com/oauth',
           clientId: process.env.LINKEDIN_CLIENT_ID!,
           clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
-        })] : []),
+          authorization: {
+            params: {
+              scope: 'openid profile email',
+            },
+          },
+          profile(profile: any) {
+            return {
+              id: profile.sub,
+              name: profile.name,
+              email: profile.email,
+              image: profile.picture,
+            }
+          },
+        }] : []),
     // Apple Provider - will need Apple app setup  
     // Apple provider configuration would go here
   ],
