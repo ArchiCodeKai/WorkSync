@@ -20,7 +20,6 @@ export const authOptions: NextAuthOptions = {
           id: 'linkedin',
           name: 'LinkedIn',
           type: 'oauth' as const,
-          version: '2.0',
           authorization: {
             url: 'https://www.linkedin.com/oauth/v2/authorization',
             params: {
@@ -32,9 +31,6 @@ export const authOptions: NextAuthOptions = {
           userinfo: 'https://api.linkedin.com/v2/userinfo',
           clientId: process.env.LINKEDIN_CLIENT_ID!,
           clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
-          client: {
-            token_endpoint_auth_method: 'client_secret_post' as const
-          },
           profile(profile: any) {
             return {
               id: profile.sub,
@@ -64,6 +60,18 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: 'jwt',
+  },
+  debug: process.env.NODE_ENV === 'development',
+  logger: {
+    error: (code, ...message) => {
+      console.error('NextAuth Error:', code, message)
+    },
+    warn: (code, ...message) => {
+      console.warn('NextAuth Warning:', code, message)  
+    },
+    debug: (code, ...message) => {
+      console.log('NextAuth Debug:', code, message)
+    }
   },
   // Enable linking accounts with same email
   events: {
