@@ -11,35 +11,18 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-    // LinkedIn Provider - Custom OAuth configuration
+    // LinkedIn Provider - Official configuration (NextAuth v4)
     ...(process.env.LINKEDIN_CLIENT_ID && 
         process.env.LINKEDIN_CLIENT_ID !== 'your-real-linkedin-client-id' && 
         process.env.LINKEDIN_CLIENT_SECRET && 
         process.env.LINKEDIN_CLIENT_SECRET !== 'your-real-linkedin-client-secret' 
-        ? [{
-          id: 'linkedin',
-          name: 'LinkedIn',
-          type: 'oauth' as const,
-          authorization: {
-            url: 'https://www.linkedin.com/oauth/v2/authorization',
-            params: {
-              scope: 'openid profile email',
-              response_type: 'code'
-            }
-          },
-          token: 'https://www.linkedin.com/oauth/v2/accessToken',
-          userinfo: 'https://api.linkedin.com/v2/userinfo',
+        ? [LinkedInProvider({
           clientId: process.env.LINKEDIN_CLIENT_ID!,
           clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
-          profile(profile: any) {
-            return {
-              id: profile.sub,
-              name: profile.name,
-              email: profile.email,
-              image: profile.picture
-            }
+          authorization: {
+            params: { scope: 'openid profile email' }
           }
-        }] : []),
+        })] : []),
     // Apple Provider - will need Apple app setup  
     // Apple provider configuration would go here
   ],
@@ -60,23 +43,5 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: 'jwt',
-  },
-  debug: process.env.NODE_ENV === 'development',
-  logger: {
-    error: (code, ...message) => {
-      console.error('NextAuth Error:', code, message)
-    },
-    warn: (code, ...message) => {
-      console.warn('NextAuth Warning:', code, message)  
-    },
-    debug: (code, ...message) => {
-      console.log('NextAuth Debug:', code, message)
-    }
-  },
-  // Enable linking accounts with same email
-  events: {
-    async linkAccount({ user, account, profile }) {
-      // Allow linking different OAuth providers with same email
-    }
   },
 }
