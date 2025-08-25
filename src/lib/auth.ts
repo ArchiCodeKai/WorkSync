@@ -21,10 +21,30 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-    LinkedInProvider({
+    {
+      id: 'linkedin',
+      name: 'LinkedIn',
+      type: 'oauth' as const,
+      version: '2.0',
       clientId: process.env.LINKEDIN_CLIENT_ID!,
       clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
-      authorization: { params: { scope: 'r_liteprofile r_emailaddress' } },
-    }),
+      authorization: {
+        url: 'https://www.linkedin.com/oauth/v2/authorization',
+        params: {
+          scope: 'openid profile email',
+          response_type: 'code',
+        },
+      },
+      token: 'https://www.linkedin.com/oauth/v2/accessToken',
+      userinfo: 'https://api.linkedin.com/v2/userinfo',
+      profile(profile: any) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        }
+      },
+    },
   ],
 }
