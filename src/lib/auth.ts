@@ -32,6 +32,14 @@ export const authOptions: NextAuthOptions = {
         },
       },
       issuer: 'https://www.linkedin.com',
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        }
+      },
     }),
   ],
 }
